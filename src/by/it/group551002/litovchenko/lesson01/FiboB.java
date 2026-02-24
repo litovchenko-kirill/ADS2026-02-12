@@ -24,14 +24,20 @@ public class FiboB {
     }
 
     BigInteger fastB(Integer n) {
-        BigInteger[] fibs_nums = new BigInteger[n];
+        if (n == 0)
+            return BigInteger.ZERO;
+        if (n == 1)
+            return BigInteger.ONE;
+
+        BigInteger[] fibs_nums = new BigInteger[n + 1];
         fibs_nums[0] = BigInteger.ZERO;
         fibs_nums[1] = BigInteger.ONE;
+
         for (int i = 2; i <= n; i++) {
             fibs_nums[i] = fibs_nums[i - 1].add(fibs_nums[i - 2]);
         }
 
-        return fibs_nums[n - 1];
+        return fibs_nums[n];
     }
 
 }
