@@ -15,8 +15,6 @@ import java.util.Scanner;
 */
 
 public class B_CountSort {
-
-
     public static void main(String[] args) throws FileNotFoundException {
         InputStream stream = B_CountSort.class.getResourceAsStream("dataB.txt");
         B_CountSort instance = new B_CountSort();
@@ -27,22 +25,47 @@ public class B_CountSort {
     }
 
     int[] countSort(InputStream stream) throws FileNotFoundException {
-        //подготовка к чтению данных
+        // подготовка к чтению данных
         Scanner scanner = new Scanner(stream);
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        //размер массива
+        // !!!!!!!!!!!!!!!!!!!!!!!!! НАЧАЛО ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!
+        // размер массива
         int n = scanner.nextInt();
         int[] points = new int[n];
 
-        //читаем точки
+        // читаем точки
+        // нам нужно найти минимальное и максимальное значение, чтобы знать размер
+        // вспомогательного массива
+        // по условию задачи числа натуральные и не превышают 10
+        int min = 1;
+        int max = 10;
+
         for (int i = 0; i < n; i++) {
             points[i] = scanner.nextInt();
         }
-        //тут реализуйте логику задачи с применением сортировки подсчетом
 
+        // тут реализуйте логику задачи с применением сортировки подсчетом
 
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
+        // Создаем вспомогательный массив для подсчета количества вхождений каждого
+        // числа
+        // Размер max - min + 1 (в нашем случае 10)
+        int[] count = new int[max - min + 1];
+
+        // 1. Считаем количество вхождений каждого числа
+        for (int value : points) {
+            count[value - min]++;
+        }
+
+        // 2. Перезаписываем исходный массив на основе данных из массива подсчета
+        int index = 0;
+        for (int i = 0; i < count.length; i++) {
+            // Пока количество данного числа (i + min) больше нуля
+            while (count[i] > 0) {
+                points[index++] = i + min;
+                count[i]--;
+            }
+        }
+
+        // !!!!!!!!!!!!!!!!!!!!!!!!! КОНЕЦ ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!
         return points;
     }
-
 }
