@@ -34,32 +34,65 @@ import java.util.Scanner;
     1 3 4 5
 */
 
-
 public class C_LongNotUpSubSeq {
 
     public static void main(String[] args) throws FileNotFoundException {
         InputStream stream = B_LongDivComSubSeq.class.getResourceAsStream("dataC.txt");
         C_LongNotUpSubSeq instance = new C_LongNotUpSubSeq();
         int result = instance.getNotUpSeqSize(stream);
-        System.out.print(result);
+
     }
 
     int getNotUpSeqSize(InputStream stream) throws FileNotFoundException {
-        //подготовка к чтению данных
+        // подготовка к чтению данных
         Scanner scanner = new Scanner(stream);
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     НАЧАЛО ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
-        //общая длина последовательности
+        // !!!!!!!!!!!!!!!!!!!!!!!!! НАЧАЛО ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!
+        // общая длина последовательности
         int n = scanner.nextInt();
         int[] m = new int[n];
-        //читаем всю последовательность
+        // читаем всю последовательность
         for (int i = 0; i < n; i++) {
             m[i] = scanner.nextInt();
         }
-        //тут реализуйте логику задачи методами динамического программирования (!!!)
+        // тут реализуйте логику задачи методами динамического программирования (!!!)
         int result = 0;
+        int[] dp = new int[n];
+        int[] parent = new int[n];
+        int lastIndex = 0;
 
+        for (int i = 0; i < n; i++) {
+            dp[i] = 1;
+            parent[i] = -1;
+            for (int j = 0; j < i; j++) {
+                if (m[i] <= m[j] && dp[i] < dp[j] + 1) {
+                    parent[i] = j;
+                    dp[i] = dp[j] + 1;
+                }
+            }
+            if (dp[i] > result) {
+                result = dp[i];
+                lastIndex = i;
+            }
+        }
 
-        //!!!!!!!!!!!!!!!!!!!!!!!!!     КОНЕЦ ЗАДАЧИ     !!!!!!!!!!!!!!!!!!!!!!!!!
+        int[] path = new int[result];
+        int curr = lastIndex;
+        for (int i = result - 1; i >= 0; i--) {
+            path[i] = curr;
+            curr = parent[curr];
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < result; i++) {
+            sb.append(path[i] + 1);
+            if (i < result - 1)
+                sb.append(" ");
+        }
+
+        System.out.println(result);
+        System.out.println(sb.toString());
+
+        // !!!!!!!!!!!!!!!!!!!!!!!!! КОНЕЦ ЗАДАЧИ !!!!!!!!!!!!!!!!!!!!!!!!!
         return result;
     }
 
