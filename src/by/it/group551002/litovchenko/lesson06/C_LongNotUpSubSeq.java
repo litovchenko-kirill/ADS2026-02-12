@@ -2,6 +2,7 @@ package by.it.group551002.litovchenko.lesson06;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Scanner;
 
 /*
@@ -54,37 +55,53 @@ public class C_LongNotUpSubSeq {
         for (int i = 0; i < n; i++) {
             m[i] = scanner.nextInt();
         }
-        // тут реализуйте логику задачи методами динамического программирования (!!!)
-        int result = 0;
-        int[] dp = new int[n];
+
+        int[] tailsIndices = new int[n];
+
         int[] parent = new int[n];
-        int lastIndex = 0;
+        Arrays.fill(parent, -1);
+
+        int len = 0;
 
         for (int i = 0; i < n; i++) {
-            dp[i] = 1;
-            parent[i] = -1;
-            for (int j = 0; j < i; j++) {
-                if (m[i] <= m[j] && dp[i] < dp[j] + 1) {
-                    parent[i] = j;
-                    dp[i] = dp[j] + 1;
+            // Бинарный поиск
+            int low = 0;
+            int high = len;
+
+            while (low < high) {
+                int mid = low + (high - low) / 2;
+
+                if (m[tailsIndices[mid]] >= m[i]) {
+                    low = mid + 1;
+                } else {
+                    high = mid;
                 }
             }
-            if (dp[i] > result) {
-                result = dp[i];
-                lastIndex = i;
+
+            if (low > 0) {
+                parent[i] = tailsIndices[low - 1];
+            }
+
+            tailsIndices[low] = i;
+            if (low == len) {
+                len++;
             }
         }
 
+        int result = len;
+
+        // Восстановление пути по индексам
         int[] path = new int[result];
-        int curr = lastIndex;
+        int curr = tailsIndices[result - 1];
         for (int i = result - 1; i >= 0; i--) {
-            path[i] = curr;
+            path[i] = curr + 1; // Индексы с 1 по условию
             curr = parent[curr];
         }
 
+        // Формирование вывода
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < result; i++) {
-            sb.append(path[i] + 1);
+            sb.append(path[i]);
             if (i < result - 1)
                 sb.append(" ");
         }
