@@ -52,7 +52,6 @@ public class C_EditDist {
         int n = one.length();
         int m = two.length();
 
-        // 1. Сначала заполняем таблицу расстояний точно так же, как в задаче B
         int[][] dp = new int[n + 1][m + 1];
         for (int i = 0; i <= n; i++)
             dp[i][0] = i;
@@ -73,7 +72,6 @@ public class C_EditDist {
         int j = m;
 
         while (i > 0 || j > 0) {
-            // Текущий штраф
             int current = dp[i][j];
 
             // Вариант 1: Копирование (#) или Замена (~) - диагональ
