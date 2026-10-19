@@ -41,27 +41,6 @@ public class MyLinkedHashSet<E> implements Set<E>{
         node.nextInOrder = null;
     }
 
-    @SuppressWarnings("unchecked")
-    private void resize() {
-        capacity *= 2;
-        Node<E>[] newElements = (Node<E>[]) new Node[capacity];
-
-        Node<E> current = head;
-        while (current != null) {
-            Node<E> nextInOrderNode = current.nextInOrder;
-
-            int hash = (current.value == null) ? 0 : (current.value.hashCode() & 0x7FFFFFFF);
-            int row = hash % capacity;
-
-            current.next = newElements[row];
-            newElements[row] = current;
-
-            current = nextInOrderNode;
-        }
-
-        elements = newElements;
-    }
-
     private int capacity = 16;
     private int size = 0;
     private Node<E> head, tail;
@@ -115,8 +94,6 @@ public class MyLinkedHashSet<E> implements Set<E>{
 
         tail = elements[row];
         size++;
-        if (size >= capacity * 0.75)
-            resize();
         return true;
     }
 
@@ -243,7 +220,7 @@ public class MyLinkedHashSet<E> implements Set<E>{
     }
 
     @Override
-    public <E> E[] toArray(E[] a) {
+    public <T> T[] toArray(T[] a) {
         return null;
     }
 }
